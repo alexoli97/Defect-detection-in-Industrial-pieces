@@ -2,7 +2,7 @@
 
 # Programmed solution and documents the obtained results
 
-The first part about how I did this task, is that I created a new folder called "InspectionTry" which I attached in the mail. This zip file has all the python scripts (which are also in the GitHub page), but also there are some folders with the images and masks. This "InspectionTry" has the following files:
+The first part about how I did this task, is that I created a new folder called "InspectionTry" which I attached in the mail. This zip file has most of the python scripts (which are also in the GitHub page), but also there are some folders with the images and masks. I used this folder instad of the given one for several reasons: To work with all the images and masks together, to be able to create bigger datasets(CNN) or smaller ones(filters+rf), to avoid corrupted files(although this can also be done in coding). This "InspectionTry" has the following files:
 
   -Gear (With all files about the Gear) -> Inside it, there are real images,synthetic images, masks and some other folders which I created.
   It is worth mentioning the folder "labels" inside Gear, which was created for the purpose of performing the last part of the task. It contains 78 gear images and it corresponding masks but with annotations on it. that is, I used an annotation tool on "Apeer.com" website in which I manually annotated 2 types of defects: Pitting (round shaped defects) and Scratching (long thin defects with curves). The result of these annotations are masks in .tiff format with annotation, that is, the background has value 0, the pitting defect has value 1 and the scratching defect has value 2.   
