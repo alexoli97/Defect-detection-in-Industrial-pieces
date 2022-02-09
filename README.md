@@ -36,9 +36,6 @@ In summary, the task was acceptably accomplished except for the prediction of sp
 
 For this task I used spyder(anaconda tensorflow) and Google colab for one of the scripts (Defect_classification.ipynb)
 
-# Name                    Version                   Build  Channel
-absl-py                   1.0.0                    pypi_0    pypi
-alabaster                 0.7.12             pyhd3eb1b0_0
 
   
   
