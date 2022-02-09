@@ -69,7 +69,6 @@ mask_dataset = np.expand_dims((np.array(mask_dataset)),3) /255.
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(image_dataset, mask_dataset, test_size = 0.10, random_state = 0)
 
-
 #Sanity check, view few mages
 import random
 import numpy as np
@@ -107,7 +106,6 @@ model.save('gear_model_Unet.hdf5')
 _, acc = model.evaluate(X_test, y_test)
 print("Accuracy = ", (acc * 100.0), "%")
 
-
 #plot the training and validation accuracy and loss at each epoch
 loss = history.history['loss']
 val_loss = history.history['val_loss']
@@ -119,7 +117,6 @@ plt.xlabel('Epochs')
 plt.ylabel('Loss')
 plt.legend()
 plt.show()
-
 
 acc = history.history['accuracy']
 val_acc = history.history['val_accuracy']
@@ -152,15 +149,7 @@ test_img = X_test[test_img_number]
 ground_truth=y_test[test_img_number]
 test_img_norm=test_img[:,:,0][:,:,None]
 test_img_input=np.expand_dims(test_img_norm, 0)
-prediction = (model.predict(test_img_input)[0,:,:,0] > 0.2).astype(np.uint8)
-
-test_img_other = cv2.imread('Gear/Synthetic Images/5 (1).png', 0) #Select the path of the desired image to test
-test_img_other = image.resize((SIZE, SIZE))
-test_img_other_norm = np.expand_dims(normalize(np.array(test_img_other), axis=1),2)
-test_img_other_norm=test_img_other_norm[:,:,0][:,:,None]
-test_img_other_input=np.expand_dims(test_img_other_norm, 0)
-
-prediction_other = (model.predict(test_img_other_input)[0,:,:,0] > 0.1).astype(np.uint8)
+prediction = (model.predict(test_img_input)[0,:,:,0] > 0.3).astype(np.uint8)
 
 plt.figure(figsize=(16, 8))
 plt.subplot(231)
@@ -174,5 +163,18 @@ plt.title('Prediction on test image')
 plt.imshow(prediction, cmap='gray')
 plt.subplot(234)
 
-#plt.imsave('test_image_gear.jpg', test_img[:,:,0], cmap='gray')
-#plt.imsave('test_image_gear_prediction.jpg', prediction_other, cmap='gray')
+##################################
+#Predict on created synthetic image
+
+test_img_other2 = cv2.imread('Gear/Blender_Synthetic_Images/1 (4).png', 0) #Select the path of the desired image to test
+test_img_other2 = cv2.resize(test_img_other2, (SIZE, SIZE))
+test_img_other_norm2 = np.expand_dims(normalize(np.array(test_img_other2), axis=1),2)
+test_img_other_norm2=test_img_other_norm2[:,:,0][:,:,None]
+test_img_other_input2=np.expand_dims(test_img_other_norm2, 0)
+
+prediction_other2 = (model.predict(test_img_other_input2)[0,:,:,0] > 0.3).astype(np.uint8)
+
+plt.title('Created synthetic image')
+plt.imshow(test_img_other2, cmap='gray')
+plt.title('Prediction on test image')
+plt.imshow(prediction_other2, cmap='gray')
