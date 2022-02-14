@@ -111,10 +111,10 @@ def feature_extraction(img):
 import pickle
 from matplotlib import pyplot as plt
 
-filename = "spring_model_gabor"
+filename = "gear_model_gabor_no_drop_background"
 loaded_model = pickle.load(open(filename, 'rb'))
 
-path = "Spring/Images_15/"
+path = "Gear/Images_15/"
 import os
 for image in os.listdir(path):  #iterate through each file to perform some action
     print(image)
@@ -126,4 +126,4 @@ for image in os.listdir(path):  #iterate through each file to perform some actio
     result = loaded_model.predict(X)
     segmented = result.reshape((img.shape))
     
-    plt.imsave('Spring/synthetic_gabor_result/'+ image, segmented, cmap ='jet')
+    #plt.imsave('Gear/Synthetic Gabor Result no drop 0/'+ image, segmented, cmap ='jet')

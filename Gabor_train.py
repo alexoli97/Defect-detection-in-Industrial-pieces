@@ -55,7 +55,7 @@ for image in os.listdir(img_path):  #iterate through each file
         #Generate Gabor features
     num = 1  #To count numbers up in order to give Gabor features a lable in the data frame
     kernels = []
-    for theta in range(2):   #3 thetas
+    for theta in range(2):   #2 thetas
         theta = theta / 4. * np.pi
         for sigma in (1, 4):  #Sigma with 1 and 4
             for lamda in np.arange(0, np.pi, np.pi / 4):   #Range of wavelengths
@@ -168,13 +168,10 @@ for mask in os.listdir(mask_path):  #iterate through each file to perform some a
 # Combine both datasets into a single one
 
 dataset = pd.concat([image_dataset, mask_dataset], axis=1)    #Concatenate both image and mask datasets
-
-#If you expect image and mask names to be the same this is where we can perform sanity check
-#dataset['Image_Name'].equals(dataset['Mask_Name'])   
+  
 ##
 ##If we do not want to include pixels with value 0 
-##e.g. Sometimes unlabeled pixels may be given a value 0.
-dataset = dataset[dataset.Label_Value != 0]
+#dataset = dataset[dataset.Label_Value != 0]
 
 #Assign training features to X and labels to Y
 #Drop columns that are not relevant for training (non-features)
@@ -213,7 +210,7 @@ print ("Accuracy = ", metrics.accuracy_score(y_test, prediction_test))
 ###########################################################
 
 ##Save the trained model as pickle string to disk for future use
-model_name = "gear_model_gabor"
+model_name = "gear_model_gabor_no_drop_background"
 pickle.dump(model, open(model_name, 'wb'))
 
 
