@@ -155,7 +155,7 @@ sns.heatmap(cm, annot=True)
 #Predict on input image
 ######################################
 
-test_img = cv2.imread('Input_Images/1 (5).png', cv2.IMREAD_COLOR) #Select the path of the desired image to test
+test_img = cv2.imread('Input_Images/1 (1).png', cv2.IMREAD_COLOR) #Select the path of the desired image to test
 test_img = cv2.resize(test_img, (128, 128)) #Match size of classification model
 test_img = cv2.cvtColor(test_img, cv2.COLOR_RGB2BGR)
 test_img = test_img/255 #normalize like input
@@ -184,18 +184,18 @@ if prediction=='Gear' :
    print("gear_model_Unet selected")
 elif prediction=='Spring' :
    model.load_weights('spring_model_Unet.hdf5')
-   print("spring_model_Unetselected")
+   print("spring_model_Unet selected")
 
-test_img_other = cv2.imread('Input_Images/1 (5).png', 0) #Select the path of the desired image to test again (should be the same as above)
+test_img_other = cv2.imread('Input_Images/1 (8).png', 0) #Select the path of the desired image to test again (should be the same as above)
 test_img_other = cv2.resize(test_img_other, (256, 256)) #Match size of pretained weights
 test_img_other_norm = np.expand_dims(normalize(np.array(test_img_other), axis=1),2)
 test_img_other_norm=test_img_other_norm[:,:,0][:,:,None]
 test_img_other_input=np.expand_dims(test_img_other_norm, 0)
 
 #Predict and threshold for values above 0.5 probability
-prediction_other = (model.predict(test_img_other_input)[0,:,:,0] > 0.5).astype(np.uint8)
+prediction_other = (model.predict(test_img_other_input)[0,:,:,0] > 0.1).astype(np.uint8) #play with threshold
 #save image
-plt.imsave('Prediction_Input_Image/1 (5).png', prediction_other, cmap='gray') #Select the path to save the output image
+#plt.imsave('Prediction_Input_Image/1 (1).png', prediction_other, cmap='gray') #Select the path to save the output image
 
 ######################################
 #Do the same but with the Traditional model using filters to compare 
@@ -205,15 +205,15 @@ from matplotlib import pyplot as plt
 import pandas as pd
 
 if prediction=='Gear' :
-    filename = "gear_model_gabor"
+    filename = "gear_model_gabor_no_drop_background"
     print("Gear_model_gabor selected")
 elif prediction=='Spring':
-    filename = "spring_model_gabor"
+    filename = "spring_model_gabor_no_drop_background"
     print("Spring_model_gabor selected")
     
 loaded_model = pickle.load(open(filename, 'rb'))
 
-test_img_other2 = cv2.imread('Input_Images/1 (8).png', cv2.IMREAD_COLOR)
+test_img_other2 = cv2.imread('Input_Images/1 (1).png', cv2.IMREAD_COLOR)
 print(test_img_other2 )
 test_img_other2 = cv2.cvtColor(test_img_other2,cv2.COLOR_BGR2GRAY)
     
@@ -309,7 +309,7 @@ X = feature_extraction(test_img_other2)
 result = loaded_model.predict(X)
 segmented = result.reshape((test_img_other2.shape))
     
-plt.imsave('Prediction_Input_Image/Gabor 1(8).png', segmented, cmap ='gray')
+#plt.imsave('Prediction_Input_Image/Gabor 1(1).png', segmented, cmap ='gray')
 
 
 
