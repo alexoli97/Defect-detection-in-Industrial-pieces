@@ -5,7 +5,7 @@ Created on Wed Jan 26 02:00:35 2022
 Defect segmentation using Unet model
 
 STEP1) Use the data_augmentation.py folder to create more training images. I created a folder with 2000 and 600 (I can't use the 2000 one due to memory allocation problems')
-STEP2)Read the images and masks (Change Gear with Spring in the folder name for choosing one or other), resize them and save them into a np.array
+STEP2) Read the images and masks (Change Gear with Spring in the folder name for choosing one or other), resize them and save them into a np.array
 STEP3) Normalize and expend dimensions to be able to use Unet Model
 STEP4) Split data intro train/test
 STEP5) Define a Unet Model (In my case I define it in other script called simple_unet_model)
@@ -23,9 +23,6 @@ import cv2
 from PIL import Image
 import numpy as np
 from matplotlib import pyplot as plt
-##
-from keras.models import Model
-from keras.layers import Input, Conv2D, MaxPooling2D, UpSampling2D, concatenate, Conv2DTranspose, BatchNormalization, Dropout, Lambda
 
 ###################################
 #os.environ["CUDA_VISIBLE_DEVICES"] = "0" #Activate GPU in 0 , deactivate in -1
@@ -99,7 +96,7 @@ history = model.fit(X_train, y_train,
                     validation_data=(X_test, y_test), 
                     shuffle=False)
 
-model.save('gear_model_Unet.hdf5')
+#model.save('gear_model_Unet.hdf5')
 
 ##################################
 #Evaluate the model
@@ -132,7 +129,7 @@ plt.show()
 ##################################
 #IOU
 y_pred=model.predict(X_test)
-y_pred_thresholded = y_pred > 0.5 #Use threshold for better measurement of prediction
+y_pred_thresholded = y_pred > 0.3 #Use threshold for better measurement of prediction (if too much no return value)
 
 intersection = np.logical_and(y_test, y_pred_thresholded)
 union = np.logical_or(y_test, y_pred_thresholded)
@@ -151,6 +148,15 @@ test_img_norm=test_img[:,:,0][:,:,None]
 test_img_input=np.expand_dims(test_img_norm, 0)
 prediction = (model.predict(test_img_input)[0,:,:,0] > 0.3).astype(np.uint8)
 
+#Predict on created synthetic image
+test_img_other2 = cv2.imread('Gear/Blender_Synthetic_Images/1 (4).png', 0) #Select the path of the desired image to test
+test_img_other2 = cv2.resize(test_img_other2, (SIZE, SIZE))
+test_img_other_norm2 = np.expand_dims(normalize(np.array(test_img_other2), axis=1),2)
+test_img_other_norm2=test_img_other_norm2[:,:,0][:,:,None]
+test_img_other_input2=np.expand_dims(test_img_other_norm2, 0)
+prediction_other2 = (model.predict(test_img_other_input2)[0,:,:,0] > 0.7).astype(np.uint8)
+
+#Plot results
 plt.figure(figsize=(16, 8))
 plt.subplot(231)
 plt.title('Testing Image')
@@ -162,19 +168,10 @@ plt.subplot(233)
 plt.title('Prediction on test image')
 plt.imshow(prediction, cmap='gray')
 plt.subplot(234)
-
-##################################
-#Predict on created synthetic image
-
-test_img_other2 = cv2.imread('Gear/Blender_Synthetic_Images/1 (4).png', 0) #Select the path of the desired image to test
-test_img_other2 = cv2.resize(test_img_other2, (SIZE, SIZE))
-test_img_other_norm2 = np.expand_dims(normalize(np.array(test_img_other2), axis=1),2)
-test_img_other_norm2=test_img_other_norm2[:,:,0][:,:,None]
-test_img_other_input2=np.expand_dims(test_img_other_norm2, 0)
-
-prediction_other2 = (model.predict(test_img_other_input2)[0,:,:,0] > 0.3).astype(np.uint8)
-
-plt.title('Created synthetic image')
+plt.title('External Image')
 plt.imshow(test_img_other2, cmap='gray')
-plt.title('Prediction on test image')
+plt.subplot(235)
+plt.title('Prediction of external Image')
 plt.imshow(prediction_other2, cmap='gray')
+plt.show()
+##################################
