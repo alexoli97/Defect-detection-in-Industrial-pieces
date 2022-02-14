@@ -30,6 +30,8 @@ The scripts in Github are:
 
 -Defect_classification.py -> A simple model using CNN (extractor) + RF to try to predict what kind of defect an image has. Bad results are obtained.
 
+-Multi_classification.py -> A model using U-net to try to predict what kind of defect an image has. Only predicts background well (even with weights). It uses "multi_unet_model script.py".
+
 -Defect_classification.ipynb -> Since I was not able to obtain good results for the defect classification. I tried more complex deep learning models using different BACKBONES (resnet34,inceptionv3 and vgg16). However, the model only predicts well the background and not the defect. even adding different weights in the models to give more value to the defect pixels. 
 
 In summary, the task was acceptably accomplished except for the prediction of springs and classification of defect types.
