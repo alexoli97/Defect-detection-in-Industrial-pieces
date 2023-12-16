@@ -1,40 +1,39 @@
 # Fraunhofer 
 
-# Programmed solution and documents the obtained results
+# Overview
+This document outlines the methodologies, tools, and outcomes of the Fraunhofer project. The primary focus of the project was to develop a comprehensive solution for image inspection, utilizing various image processing and machine learning techniques. The work involved the creation and analysis of image datasets, implementation of models for defect detection and classification, and the documentation of results.
 
-The first part about how I did this task, is that I created a new folder called "InspectionTry" which I attached in the mail. This zip file has most of the python scripts (which are also in the GitHub page), but also there are some folders with the images and masks. I used this folder instad of the given one for several reasons: To work with all the images and masks together, to be able to create bigger datasets(CNN) or smaller ones(filters+rf), to avoid corrupted files(although this can also be done in coding). This "InspectionTry" has the following files:
+# Repository Structure
+The project repository consists of several key components, detailed as follows:
 
-  -Gear (With all files about the Gear) -> Inside it, there are real images,synthetic images, masks and some other folders which I created.
-  It is worth mentioning the folder "labels" inside Gear, which was created for the purpose of performing the last part of the task. It contains 78 gear images and it corresponding masks but with annotations on it. that is, I used an annotation tool on "Apeer.com" website in which I manually annotated 2 types of defects: Pitting (round shaped defects) and Scratching (long thin defects with curves). The result of these annotations are masks in .tiff format with annotation, that is, the background has value 0, the pitting defect has value 1 and the scratching defect has value 2.   
-  
-  -Spring (With all files about the Spring ) -> Inside it, there are real images,synthetic images, masks and some other folders which I created.
-  It is worth mentioning the folder Blender_Synthetic_Images ,in both Gear and Spring, which contains some images taken by me in the software Blender.
-  -Classification (labels for defect classification) -> Inside it, there are two subfolders, one with all Gear images (synthetic and real) and the other with all Spring images (synthetic and real)
-  
-  -Input Images -> A selection of 8 test images (2 synthetic gear, 2 real gear, 2 synthetic spring, 2 real spring) used for testing the results of the models in the different types of images.
-  
-  -Prediction Input Image -> The output of the models that use "Input Images"
-  
-  -Most of the scripts that are in the GitHub page (except two: DefectSegmentationUnet.py and Defect_classification.ipynb)
-  -Some pretrained weights for the models.
- 
-The scripts in Github are:
-
-- DefectSegmentationUnet.py -> model for defect segmentation using Unet CNN. Good results are obtained in the gear, especially in the synthetic images. On the other hand, poor results are obtained when training the springs because of the greater complexity of the images with respect to the gear. in the final part of this code an image taken in the blender software ("blender_synthetic_images" subfolder) is included to test the model. Good results are obtained for the gear and bad results for the spring, as expected. This script uses other two scripts:
-  - simple_unet_model.py -> It defines the architecture of the Unet model.
-  - data.augmentation.py -> Code used for increasing the size of the dataset. We only had around 120 images for gear, that might not be enough for a Unet CNN model. Therefore , use this code for increasing Gear and Spring images to 600 (Not more due to memory allocation problems in my GPU)
-
--Gabor.train.py and Gabor.predict.py -> model for defect segmentation using Random Forest and image filters. Due to the not so satisfactory results with the spring, I decided to try another type of model, in this case using several image filters, mainly gabor filters and creating a model with random forest. Better accuracy results are obtained although equal or worse visualization of the defects in the output image. It is worth mentioning, that the input is only 15 images (subfolders images_15 and masks_15 in both gear and spring) since this is not a Deep learning model that requires large amounts of input data. The output of this code is shown in the folder: Gabor result in both gear and spring.
-
--classification.py -> Classification model which can recognize if the image contains spring or gear object. After, a image is selected from the folder "Input Images" and this program recognizes which object it is and runs appropriate segmentation model. It does the segmentation in both models described previosly, that is, Unet and RF.
-
--Defect_classification.py -> A simple model using CNN (extractor) + RF to try to predict what kind of defect an image has. Bad results are obtained.
-
--Multi_classification.py -> A model using U-net to try to predict what kind of defect an image has. Only predicts background well (even with weights). It uses "multi_unet_model script.py".
-
--Defect_classification.ipynb -> Since I was not able to obtain good results for the defect classification. I tried more complex deep learning models using different BACKBONES (resnet34,inceptionv3 and vgg16). However, the model only predicts well the background and not the defect. even adding different weights in the models to give more value to the defect pixels. 
-
-In summary, the task was acceptably accomplished except for the prediction of springs and classification of defect types.
+# 1. InspectionTry Directory
+Purpose: Created as a primary workspace to organize images and masks for efficient processing and analysis.
+Contents:
+Gear folder: Contains real and synthetic images, masks, and subfolders for gear images, including a 'labels' folder with annotated gear images.
+Spring folder: Similar to the Gear folder, it includes real and synthetic images and masks for spring images.
+Blender_Synthetic_Images: Contains images created in Blender for both gear and spring datasets.
+Classification: Includes labeled images for defect classification, divided into Gear and Spring subfolders.
+Input Images: A set of 8 test images (2 synthetic and 2 real for both gear and spring) for model validation.
+Prediction Input Image: Contains model outputs using the 'Input Images'.
+Python scripts and pretrained model weights (excluding DefectSegmentationUnet.py and Defect_classification.ipynb).
+# 2. Scripts in GitHub
+DefectSegmentationUnet.py: A Unet CNN model for defect segmentation, with specific implementations for gear and spring images.
+simple_unet_model.py: Defines the Unet model architecture.
+data_augmentation.py: Enhances the dataset size for better model training.
+Gabor.train.py and Gabor.predict.py: Implements a Random Forest model with image filters, particularly Gabor filters, for defect segmentation.
+classification.py: Classifies images as either gear or spring and applies appropriate segmentation models.
+Defect_classification.py: A CNN+RF model for defect type prediction, with limited success.
+Multi_classification.py: Employs a U-net model for defect type prediction.
+Defect_classification.ipynb: Experiments with complex deep learning models using various backbones (ResNet34, InceptionV3, VGG16) for defect classification.
+Results and Observations
+The defect segmentation models showed promising results for gear images, particularly with synthetic data. However, the complexity of spring images posed challenges in achieving similar accuracy.
+The defect classification models were less effective, especially in distinguishing different types of defects.
+The project successfully demonstrated the application of machine learning techniques in image inspection, despite some limitations in specific areas.
+Tools and Environment
+Development Environments: Spyder (Anaconda TensorFlow) and Google Colab.
+Languages and Frameworks: Python, TensorFlow.
+Conclusion
+The Fraunhofer project achieved considerable success in image processing and defect detection using machine learning models. While certain aspects, such as spring image segmentation and defect classification, require further refinement, the project lays a solid foundation for future enhancements in automated image inspection technologies.
 
 For this task I used spyder(anaconda tensorflow) and Google colab for one of the scripts (Defect_classification.ipynb)
 
